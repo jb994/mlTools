@@ -54,8 +54,9 @@ def xgbooster(X_test, y_test, X_train, y_train,
 	params={
         'eta':0.3, #Like lr; weights the additinos of newly added trees
         'max_depth':3, #Depth of decision trees to be trained
-        'objective':'multi:softprob', #Loss function
-        'num_class':3 #Num classes in dataset
+        #'objective':'multi:softprob', #Loss function
+        'objective':'reg:tweedie', #Loss function
+        #'num_class':3 #Num classes in dataset
     	}
     ):
 	import xgboost as xgb
@@ -63,7 +64,7 @@ def xgbooster(X_test, y_test, X_train, y_train,
 	D_test = xgb.DMatrix(X_test, label=y_test)
 
 	steps=20
-	model = xgb.train(params, D_train, steps)
+	model = xgb.XGBRegressor(**params).fit(X_train, y_train)
 	print(model.score(X_test, y_test))
 	return model
 
